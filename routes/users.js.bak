@@ -6,7 +6,7 @@ var db = require('../utils/dbUtils');
 router.get('/', function(req, res, next) {
 	var id = '5';
 	db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
-		console.log("用户信息主页...??");
+		console.log("用户信息主页...");
 		res.json(result.recordset);
 	});
 });
