@@ -1,12 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../utils/dbUtils');
+// var logger = require('../logs/log').logger; 
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-	var id = '5';
-	db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
+	//var id = '5';
+	//db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
+	db.selectAll('LL_Users',function(err,result){
 		console.log("用户信息主页...??");
+		// logger.info('使用log4js输出日志'); 
 		res.json(result.recordset);
 	});
 });
@@ -118,7 +121,7 @@ router.get('/getUserById/:id',function(req,res,next) {
 	if (isNaN(id)){
 		res.json('{error:"输入参数有误！"}');
 	} else {
-		db.select('CX_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
+		db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
 			console.log(err);
 			res.json(result.recordset);
 		});	
@@ -130,7 +133,7 @@ router.get('/getUserByUserName/:username',function(req,res,next) {
 	if (username == ""){
 		res.json('{error:"输入参数有误！"}');
 	} else {
-		db.likeQuery('select * from CX_Users where UserName like "%@username%"',{username:username},function(err,result){
+		db.likeQuery('select * from LL_Users where UserName like "%@username%"',{username:username},function(err,result){
 			console.log(err);
 			res.json(result.recordset);
 		});

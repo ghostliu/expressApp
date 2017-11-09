@@ -11,11 +11,16 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "file-stream-rotator": "^0.2.0",
     "gulp": "^3.9.1",
     "gulp-express": "^0.3.5",
     "jade": "~1.11.0",
+    "log4js": "^2.3.11",
     "morgan": "~1.9.0",
     "mssql": "^4.1.0",
     "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
   }
 }

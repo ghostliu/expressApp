@@ -4,7 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var debug = require('debug')('app4');
+var fs = require('fs');
+var FileStreamRotator = require('file-stream-rotator');
+
+var logDirectory = __dirname + '/logs';
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -17,7 +20,16 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+var accessLogStream = FileStreamRotator.getStream({
+	filename:logDirectory + '/access-%DATE%.log',
+	frequency: 'daily',
+	verbose: false
+});
+app.use(logger('combined', {stream: accessLogStream}));
+// logger model:combined,common,dev,short,tiny
 app.use(logger('dev'));
+app.use(logger('logger: 调用方式> :method 请求文件> :url :status :response-time ms'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
