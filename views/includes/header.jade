@@ -1,6 +1,36 @@
 //header.jade
-.container
-	.row
-		.page-header
-			h1 #{title}
-				small 爱电脑
+header.am-topbar.am-topbar-inverse.admin-header
+	div.am-topbar-brand
+		strong xxx 
+		small 后台管理系统
+	button.am-topbar-btn.am-topbar-toggle.am-btn.am-btn-sm.am-btn-success.am-show-sm-only(data-am-collapse="{target: '#topbar-collapse'}")
+		span.am-sr-only 导航切换 
+		span.am-icon-bars
+	div#topbar-collapse.am-collapse.am-topbar-collapse
+		ul.am-nav.am-nav-pills.am-topbar-nav.am-topbar-right.admin-header-list
+			li
+				a(href="javascript:;")
+					span.am-icon-envelope-o 收件箱
+					span.am-badge.am-badge-warning 5
+			li.am-dropdown(data-am-dropdown)
+				a(
+					href="javascript:;"
+					data-am-dropdown-toggle
+				).am-dropdown-toggle
+					span.am-icon-users 管理员
+					span.am-icon-caret-down
+				ul.am-dropdown-content
+					li
+						a(href="#")
+							span.am-icon-user  资料
+					li
+						a(href="#")
+							span.am-icon-cog  设置
+					li
+						a(href="#")
+							span.am-icon-power-off  退出
+			li.am-hide-sm-only
+				a#admin-fullscreen(href="javascript:;")
+					span.am-icon-arrows-alt
+					span.admin-fullText 开启全屏
+

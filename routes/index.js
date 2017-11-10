@@ -13,8 +13,8 @@ router.use(function timeLog(req,res,next){
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	console.log(requestTime + "跳转到主页");
-  	//res.render('index', { title: 'Express jade',users:[{username:"wilson"},{username:"wilson zhong "},{username:"zhang wei"}] });
-  	res.render('admin-index');
+  	res.render('index', { title: 'xx后台管理系统',users:[{username:"wilson"},{username:"wilson zhong "},{username:"zhang wei"}] });
+  	// res.render('admin-index',{title:'这是一个中文标题'});
 });
 
 module.exports = router;

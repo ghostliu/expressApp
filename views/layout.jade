@@ -3,7 +3,54 @@ html
   head
     title= title
     include includes/head
-    link(rel='stylesheet', href='/stylesheets/style.css')
   body
     include includes/header
-    block content
+    //block content
+
+    div.am-cf.admin-main
+        div#admin-offcanvas.admin-sidebar.am-offcanvas
+            div.am-offcanvas-bar.admin-offcanvas-bar
+                ul.am-list.admin-sidebar-list
+                    li
+                        a(href="admin-index.html") 
+                            span.am-icon-home  首页
+                    li.admin-parent 
+                        a(data-am-collapse="{target: '#collapse-nav'}").am-cf
+                            span.am-icon-file  页面模块
+                            span.am-icon-angle-right.am-fr.am-margin-right
+                        ul#collapse-nav.am-list.am-collapse.admin-sidebar-sub.am-in
+                            li
+                                a(href="admin-user.html").am-cf
+                                    span.am-icon-check  个人资料
+                                    span.am-icon-star.am-fr.am-margin-right.admin-icon-yellow
+                            li
+                                a(href="admin-user.html").am-cf
+                                    span.am-icon-puzzle-piece  帮助页                         
+                            li
+                                a(href="admin-user.html").am-cf
+                                    span.am-icon-th  相册页面
+                                    span.am-badge.am-badge-secondary.am-margin-right.am-fr  24                          
+                            li
+                                a(href="admin-user.html").am-cf
+                                    span.am-icon-calendar  系统日志  
+                            li
+                                a(href="admin-user.html").am-cf
+                                    span.am-icon-bug  404
+                    li
+                        a(href="admin-index.html") 
+                            span.am-icon-home  表格
+                    li
+                        a(href="admin-index.html") 
+                            span.am-icon-table  表单
+                    li
+                        a(href="#") 
+                            span.am-icon-pencil-square-o  注销                                                                                  
+                div.am-panel.am-panel-default.admin-sidebar-panel
+                    div.am-panel-bd
+                        p 
+                            span.am-icon-bookmark  公告
+                        p 时光静好，与君语；细水流年，与君同。—— Amaze UI
+
+        div.admin-content
+            block content
+a.am-icon-btn.am-icon-th-list.am-show-sm-only.admin-menu(data-am-offcanvas="{target: '#admin-offcanvas'}")
