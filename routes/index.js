@@ -68,42 +68,27 @@ router.get('/systemSet',function(req, res, next) {
 		res.render('systemSet',{pageName:'系统配置',siteName:siteName});
 	});
 });
-/*
-create table LL_SystemConfig (
-   FID                  int                  identity,
-   FName                varchar(200)         null,
-   FValue               varchar(500)         null,
-   FNote                varchar(500)         null
-)
-go
 
-if exists (select 1
-          from sysobjects
-          where  id = object_id('UpdateLL_SystemConfig')
-          and type in ('P','PC'))
-   drop procedure UpdateLL_SystemConfig
-go
+// 系统配置，更新--get
+router.get('/systemSet/saveSystemConfig',function(res,req,next){
+	console.log(requestTime+'get系统配置信息更新');
+	var type = 'req.query.type';
+    var info = 'req.query.info';
+    console.log("服务器收到一个Ajax ["+type+"] 请求，信息为："+info);
+    res.json(['success', "服务器收到一个Ajax ["+type+"] 请求，信息为："+info]); 
+});
 
-
-create procedure UpdateLL_SystemConfig 
-@i_FID int,
-@i_FName varchar(200),
-@i_FValue varchar(500),
-@i_FNote varchar(500)
-as
-
-begin
-
-if @i_FID =''
-    insert into LL_SystemConfig(FName,FValue,FNote)
-    values(@i_FName,@i_FValue,@i_FNote)
-else
-    update LL_SystemConfig set FName = @i_FName,FValue = @i_FValue,FNote = @i_FNote
-    where FID = @i_FID
-
-end
-go
-
-*/
+// 系统配置，更新--post
+router.post('/systemSet/saveSystemConfig',function(res,req,next){
+	console.log(requestTime+'post系统配置信息更新');
+	console.log("req:"+req.body.fname);
+	console.log("req:"+req.body.fvalue);
+	var siteName = req.body.fvalue;
+	//res.json({success:1});
+	//res.send(JSON.stringify({success:1}));
+	//res.json({data: [res, dangerRate]});
+	//res.redirect('/systemSet');
+	res.send(200, 'req.body.address');
+});
 
 module.exports = router;
