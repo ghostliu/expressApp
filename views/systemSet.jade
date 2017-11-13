@@ -1,0 +1,70 @@
+extends layout
+
+block content
+  div.am-cf.am-padding
+     div.am-fl.am-cf
+        strong.am-text-primary.am-text-lg 首页
+        if pageName != ""
+             span  / 
+             small #{pageName}
+  hr
+  div(data-am-tabs).am-tabs.am-margin
+    ul.am-tabs-nav.am-nav.am-nav-tabs
+      li.am-active
+        a(href="#tab1") 基本信息
+      li
+        a(href="#tab2") 详细描述
+      li
+        a(href="#tab3") SEO 选项
+
+    div.am-tabs-bd
+       div#tab1.am-tab-panel.am-fade.am-in.am-active
+          div.am-g.am-margin-top
+            div.am-u-sm-4.am-u-md-2.am-text-right 网站名称
+            div.am-u-sm-8.am-u-md-10
+                input#siteName(type="text"
+                               value='#{siteName}').am-input-sm
+          div.am-g.am-margin-top
+            div.am-u-sm-4.am-u-md-2.am-text-right 选项内容
+            div.am-u-sm-8.am-u-md-10
+                select(data-am-selected="{btnSize: 'sm'}")
+                   option(value="option1") 选项一
+                   option(value="option1") 选项二
+                   option(value="option1") 选项三
+          div.am-g.am-margin-top
+            div.am-u-sm-4.am-u-md-2.am-text-right 发布日期
+            div.am-u-sm-8.am-u-md-10
+                form.am-form.am-form-inline
+                    div.am-form-group.am-form-icon
+                       i.am-icon-calendar
+                       input(type="date"
+                             placeholder="日期"
+                       ).am-form-field.am-input-sm
+          div.am-g.am-margin-top
+            div.am-u-sm-4.am-u-md-2.am-text-right 发布时间
+            div.am-u-sm-8.am-u-md-10
+                 form.am-form.am-form-inline
+                    div.am-form-group.am-form-icon
+                       i.am-icon-calendar
+                       input(type="datetime-local"
+                             placeholder="时间"
+                       ).am-form-field.am-input-sm
+       div#tab2.am-tab-panel.am-fade
+          form.am-form
+             div.am-g.am-margin-top-sm
+                div.am-u-sm-12.am-u-md-2.am-text-right.admin-form-text 内容描述
+                div.am-u-sm-12.am-u-md-10
+                   textarea(rows="10"
+                            placeholder="请输入文本内容"
+                   )
+       div#tab3.am-tab-panel.am-fade
+           form.am-form
+              div.
+
+  div.am-margin
+    button(type="button"
+           onclick="saveSystemConfig()"
+           ).am-btn.am-btn-primary.am-btn-xs 保2存
+
+block scripts
+  script(src="/javascripts/system/systemSet.js")

@@ -1,7 +1,7 @@
 //header.jade
 header.am-topbar.am-topbar-inverse.admin-header
 	div.am-topbar-brand
-		strong xxx 
+		strong #{siteName} 
 		small 后台管理系统
 	button.am-topbar-btn.am-topbar-toggle.am-btn.am-btn-sm.am-btn-success.am-show-sm-only(data-am-collapse="{target: '#topbar-collapse'}")
 		span.am-sr-only 导航切换 
@@ -10,7 +10,7 @@ header.am-topbar.am-topbar-inverse.admin-header
 		ul.am-nav.am-nav-pills.am-topbar-nav.am-topbar-right.admin-header-list
 			li
 				a(href="javascript:;")
-					span.am-icon-envelope-o 收件箱
+					span.am-icon-envelope-o 消息
 					span.am-badge.am-badge-warning 5
 			li.am-dropdown(data-am-dropdown)
 				a(
@@ -21,13 +21,13 @@ header.am-topbar.am-topbar-inverse.admin-header
 					span.am-icon-caret-down
 				ul.am-dropdown-content
 					li
-						a(href="#")
-							span.am-icon-user  资料
+						a(href="/userInfo")
+							span.am-icon-user  个人资料
 					li
-						a(href="#")
-							span.am-icon-cog  设置
+						a(href="/systemSet")
+							span.am-icon-cog  系统设置
 					li
-						a(href="#")
+						a(href="/logout")
 							span.am-icon-power-off  退出
 			li.am-hide-sm-only
 				a#admin-fullscreen(href="javascript:;")
