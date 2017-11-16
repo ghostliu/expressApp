@@ -10,11 +10,12 @@
 
     $.ajax(
         {
-            type: 'post',
+            type: 'POST',
             url: '/systemSet/saveSystemConfig',
             data: postData,
             dataType: 'json',
             success: function (data) {
+              alert('保存成功!');
                 if (data) {
                 	console.log(data);
                 }
