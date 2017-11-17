@@ -1,16 +1,19 @@
 var express = require('express');
 var router = express.Router();
+var Utils = require('../utils/utils');
 var db = require('../utils/dbUtils');
-// var logger = require('../logs/log').logger; 
+
+var requestTime = "["+Utils.DateUtils.getFormatDate(new Date()) + "] ";
 
 /* GET users listing. */
+//查询所有用户信息
 router.get('/', function(req, res, next) {
 	//var id = '5';
 	//db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
 	db.selectAll('LL_Users',function(err,result){
-		console.log("用户信息主页...??");
-		// logger.info('使用log4js输出日志'); 
-		res.json(result.recordset);
+		console.log(requestTime + "跳转到用户主页");
+		res.render('users', { title: '用户管理',pageName:'用户管理',users:result.recordset});
+		//res.json(result.recordset);
 	});
 });
 
