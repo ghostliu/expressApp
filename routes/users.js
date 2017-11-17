@@ -6,16 +6,60 @@ var db = require('../utils/dbUtils');
 var requestTime = "["+Utils.DateUtils.getFormatDate(new Date()) + "] ";
 
 /* GET users listing. */
-//查询所有用户信息
+//查询用户信息
 router.get('/', function(req, res, next) {
 	//var id = '5';
 	//db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
-	db.selectAll('LL_Users',function(err,result){
+	/*db.selectAll('LL_Users',function(err,result){
 		console.log(requestTime + "跳转到用户主页");
 		res.render('users', { title: '用户管理',pageName:'用户管理',users:result.recordset});
-		//res.json(result.recordset);
+	});*/
+	// 每页显示数量
+	var pageSize = req.body.pageSize ? req.body.pageSize:10;
+	// 请求页,如果为空则显示第1页
+	var Page = req.body.page ? req.body.page:1;
+	var pageOption = {
+		i_pageSize:{
+			sqlType:"number",
+			direction:"input",
+			inputValue:pageSize
+		},
+		i_page:{
+			sqlType:"number",
+			direction:"input",
+			inputValue:Page
+		}
+	};
+	db.executeProcedure('pageSYS_User',pageOption,function(err, recordsets,returnValue,affected){
+		console.log(requestTime + "跳转到用户主页");
+		if (err){
+    		res.json(err);
+    	} else
+    	{
+    		res.json(recordsets);
+    		//res.render('users', { title: '用户管理',pageName:'用户管理',users:result.recordset,totalCount:recordsets.recordsets[1][0].totalCount});
+    		console.log(recordsets.recordsets[1][0].totalCount);	
+    	}
 	});
 });
+
+/*
+create proc pageSYS_User
+@i_pageSize int,
+@i_page int
+
+as 
+declare @temp int
+set @temp=@i_pageSize * (@i_page -1)
+begin 
+  select top (select @i_pageSize) FUserID,LoginName,UserName,Sex,Email,MobilePhone,FNote,IsSuper,WeiXinId,CreateDtm  from LL_Users
+  where FUserID not in (select top (select @temp) FUserID from LL_Users)
+  order by FUserID
+
+  select count(FUserID) as totalCount from LL_Users
+end
+
+*/
 
 //存储过程添加用户
 router.get('/addUser',function(req,res,next) {
@@ -25,12 +69,12 @@ router.get('/addUser',function(req,res,next) {
 		i_LoginName:{
 			sqlType:"string",
 			direction:"input",
-			inputValue:"hujintao"
+			inputValue:"testUser"
 		},
 		i_UserName:{
 			sqlType:"string",
 			direction:"input",
-			inputValue:"hujintao"
+			inputValue:"测试用户2"
 		},
 		i_Password:{
 			sqlType:"string",
@@ -55,7 +99,7 @@ router.get('/addUser',function(req,res,next) {
 		i_FNote:{
 			sqlType:"string",
 			direction:"input",
-			inputValue:""
+			inputValue:"我是备注"
 		},
 		i_IsSuper:{
 			sqlType:"number",
@@ -65,7 +109,7 @@ router.get('/addUser',function(req,res,next) {
 		i_WeiXinId:{
 			sqlType:"string",
 			direction:"input",
-			inputValue:null
+			inputValue:'rider999'
 		},
 		i_CreateByUserId:{
 			sqlType:"number",
