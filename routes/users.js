@@ -36,30 +36,12 @@ router.get('/', function(req, res, next) {
     		res.json(err);
     	} else
     	{
-    		res.json(recordsets);
-    		//res.render('users', { title: '用户管理',pageName:'用户管理',users:result.recordset,totalCount:recordsets.recordsets[1][0].totalCount});
-    		console.log(recordsets.recordsets[1][0].totalCount);	
+    		//res.json(recordsets);
+    		res.render('users', { title: '用户管理',pageName:'用户管理',users:recordsets.recordset,totalCount:recordsets.recordsets[1][0].totalCount});
+    		//console.log(recordsets.recordsets[1][0].totalCount);	
     	}
 	});
 });
-
-/*
-create proc pageSYS_User
-@i_pageSize int,
-@i_page int
-
-as 
-declare @temp int
-set @temp=@i_pageSize * (@i_page -1)
-begin 
-  select top (select @i_pageSize) FUserID,LoginName,UserName,Sex,Email,MobilePhone,FNote,IsSuper,WeiXinId,CreateDtm  from LL_Users
-  where FUserID not in (select top (select @temp) FUserID from LL_Users)
-  order by FUserID
-
-  select count(FUserID) as totalCount from LL_Users
-end
-
-*/
 
 //存储过程添加用户
 router.get('/addUser',function(req,res,next) {
@@ -122,7 +104,7 @@ router.get('/addUser',function(req,res,next) {
 			inputValue:'系统管理员'
 		},
 	};
-	db.executeProcedure("AddLL_Users", user, function(err, recordsets,returnValue,affected){
+	db.executeProcedure("AddSYS_User", user, function(err, recordsets,returnValue,affected){
     	console.log('存储过程方式插入成功');
     	if (err){
     		res.json(err);
@@ -142,7 +124,7 @@ router.get('/add', function (req, res, next) {//添加一条数据
     	email:'liu@124.com',
     	Telephone:'151616123456'
     };
-    db.add(user, "CX_Users", function(err, result){
+    db.add(user, "SYS_Users", function(err, result){
     	console.log('插入成功'+res.json(result));
         //res.redirect('back');//返回前一个页面
     });
@@ -168,7 +150,7 @@ router.get('/getUserById/:id',function(req,res,next) {
 	if (isNaN(id)){
 		res.json('{error:"输入参数有误！"}');
 	} else {
-		db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
+		db.select('SYS_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
 			console.log(err);
 			res.json(result.recordset);
 		});	
@@ -180,7 +162,7 @@ router.get('/getUserByUserName/:username',function(req,res,next) {
 	if (username == ""){
 		res.json('{error:"输入参数有误！"}');
 	} else {
-		db.likeQuery('select * from LL_Users where UserName like "%@username%"',{username:username},function(err,result){
+		db.likeQuery('select * from SYS_Users where UserName like "%@username%"',{username:username},function(err,result){
 			console.log(err);
 			res.json(result.recordset);
 		});

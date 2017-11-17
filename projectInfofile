@@ -1,0 +1,170 @@
+根目录执行 gulp命令
+浏览器访问地址：http://127.0.0.1:3000/
+
+1.相关表
+
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : 192.168.31.24
+ Source Server Type    : SQL Server
+ Source Server Version : 13001601
+ Source Host           : 192.168.31.24
+ Source Database       : NodeWeb
+ Source Schema         : dbo
+
+ Target Server Type    : SQL Server
+ Target Server Version : 13001601
+ File Encoding         : utf-8
+
+ Date: 11/17/2017 19:19:36 PM
+*/
+
+-- ----------------------------
+--  Table structure for SYS_Users 用户表
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID('[dbo].[SYS_Users]') AND type IN ('U'))
+	DROP TABLE [dbo].[SYS_Users]
+GO
+CREATE TABLE [dbo].[SYS_Users] (
+	[LoginName] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[UserName] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[Pwd] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[Sex] int NULL,
+	[Email] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[MobilePhone] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[FNote] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[IsSuper] bit NULL,
+	[WeiXinId] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[CreateByUserId] int NULL,
+	[CreateByUserName] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[CreateDtm] datetime NULL,
+	[UpdateByUserId] int NULL,
+	[UpdateByUserName] varchar(100) COLLATE Chinese_PRC_CI_AS NULL,
+	[UpdateByDtm] datetime NULL,
+	[FUserId] int IDENTITY(1,1) NOT NULL
+)
+ON [PRIMARY]
+GO
+
+
+-- ----------------------------
+--  Options for table SYS_Users
+-- ----------------------------
+ALTER TABLE [dbo].[SYS_Users] SET (LOCK_ESCALATION = TABLE)
+GO
+DBCC CHECKIDENT ('[dbo].[SYS_Users]', RESEED, 3)
+GO
+
+
+-- ----------------------------
+--  Table structure for SYS_SystemConfig 系统配置表
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID('[dbo].[SYS_SystemConfig]') AND type IN ('U'))
+	DROP TABLE [dbo].[SYS_SystemConfig]
+GO
+CREATE TABLE [dbo].[SYS_SystemConfig] (
+	[FID] int IDENTITY(1,1) NOT NULL,
+	[FName] varchar(200) COLLATE Chinese_PRC_CI_AS NULL,
+	[FValue] varchar(500) COLLATE Chinese_PRC_CI_AS NULL,
+	[FNote] varchar(500) COLLATE Chinese_PRC_CI_AS NULL
+)
+ON [PRIMARY]
+GO
+
+
+-- ----------------------------
+--  Options for table SYS_SystemConfig
+-- ----------------------------
+ALTER TABLE [dbo].[SYS_SystemConfig] SET (LOCK_ESCALATION = TABLE)
+GO
+DBCC CHECKIDENT ('[dbo].[SYS_SystemConfig]', RESEED, 1)
+GO
+
+
+
+2.存储过程
+
+--创建用户
+CREATE PROCEDURE AddSYS_User
+@i_LoginName varchar(100),
+@i_UserName varchar(100),
+@i_Password varchar(100),
+@i_Sex int,
+@i_Email varchar(100),
+@i_MobilePhone varchar(100),
+@i_FNote varchar(250),
+@i_IsSuper bit,
+@i_WeiXinId varchar(100),
+@i_CreateByUserId int,
+@i_CreateByUserName varchar(100)
+as
+
+insert into SYS_Users
+(
+LoginName,
+UserName,
+Pwd,
+Sex,
+Email,
+MobilePhone,
+FNote,
+IsSuper,
+WeiXinId,
+CreateByUserId,
+CreateByUserName
+)
+values(
+@i_LoginName,
+@i_UserName,
+@i_Password,
+@i_Sex,
+@i_Email,
+@i_MobilePhone,
+@i_FNote,
+@i_IsSuper,
+@i_WeiXinId,
+@i_CreateByUserId,
+@i_CreateByUserName
+)
+
+SELECT 1 as codeId
+go
+
+// 更新系统配置信息
+create procedure UpdateSYS_SystemConfig 
+@i_FID int,
+@i_FName varchar(200),
+@i_FValue varchar(500),
+@i_FNote varchar(500)
+as
+
+begin
+
+if @i_FID =''
+    insert into SYS_SystemConfig(FName,FValue,FNote)
+    values(@i_FName,@i_FValue,@i_FNote)
+else
+    update SYS_SystemConfig set FName = @i_FName,FValue = @i_FValue,FNote = @i_FNote
+    where FID = @i_FID
+
+end
+go
+
+// 用户表分页
+create proc pageSYS_User
+@i_pageSize int,
+@i_page int
+
+as 
+declare @temp int
+set @temp=@i_pageSize * (@i_page -1)
+begin 
+  select top (select @i_pageSize) FUserID,LoginName,UserName,Sex,Email,MobilePhone,FNote,IsSuper,WeiXinId,CreateDtm  from LL_Users
+  where FUserID not in (select top (select @temp) FUserID from LL_Users)
+  order by FUserID
+
+  select count(FUserID) as totalCount from LL_Users
+end
+go
+

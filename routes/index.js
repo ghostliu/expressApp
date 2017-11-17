@@ -52,7 +52,7 @@ router.get('/userMessage',function(req, res, next){
 //系统配置
 router.get('/systemSet',function(req, res, next) {
 	console.log(requestTime + "系统配置");
-	db.selectAll("LL_systemConfig",function(error,result){
+	db.selectAll("SYS_systemConfig",function(error,result){
 		var sysConfig = result.recordset;
 		var siteName = '';
 		//res.json(sysConfig);
@@ -109,7 +109,7 @@ router.post('/systemSet/saveSystemConfig',function(req, res, next){
 		}
 	};
 
-	db.executeProcedure("UpdateLL_SystemConfig", systemConfig, function(err, recordsets,returnValue,affected){
+	db.executeProcedure("UpdateSYS_SystemConfig", systemConfig, function(err, recordsets,returnValue,affected){
     	if (err){
     		console.log('系统配置信息更新失败');
     		res.json(err);
