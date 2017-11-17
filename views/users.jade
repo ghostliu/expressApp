@@ -34,7 +34,41 @@ block content
      div.am-u-sm-12
         form.am-form
            table.am-table.am-table-striped.am-table-hover.table-main
-           
+              thead
+                 tr
+                   th.table-check
+                      input(type="checkbox")
+                   th.table-id ID
+                   th.table-loginname 登录名
+                   th.table-username 用户名
+                   th.table-sex 性别
+                   th.table-email 邮件地址
+                   th.table-mobile 手机号
+                   th.table-issuper 是否为管理员
+                   th.table-weixin 微信号
+                   th.table-createtime 创建时间
+                   th.table-note 备注
+               tbody
+                 each user,i in users 
+                    tr
+                       td 
+                          input(type="checkbox")
+                       td #{i+1}
+                       td #{user.LoginName}
+                       td #{user.UserName}
+                       if user.Sex == 0
+                         td 女
+                       else 
+                         td 男
+                       td #{user.Email}
+                       td #{user.MobilePhone}
+                       if user.IsSuper == true
+                          td 是
+                       else
+                          td 否
+                       td #{user.WeiXinId}
+                       td #{user.CreateDtm}
+                       td #{user.FNote}
            div.am-cf 共 15 条记录 
               div#page1
 
