@@ -9,35 +9,58 @@ var requestTime = "["+Utils.DateUtils.getFormatDate(new Date()) + "] ";
 //查询用户信息
 router.get('/', function(req, res, next) {
 	//var id = '5';
-	//db.select('LL_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
-	/*db.selectAll('LL_Users',function(err,result){
+	//db.select('SYS_Users',"","where FUserID = @id",{id:id}," ",function(err,result){
+	/*db.selectAll('SYS_Users',function(err,result){
 		console.log(requestTime + "跳转到用户主页");
 		res.render('users', { title: '用户管理',pageName:'用户管理',users:result.recordset});
 	});*/
-	// 每页显示数量
-	var pageSize = req.body.pageSize ? req.body.pageSize:10;
 	// 请求页,如果为空则显示第1页
-	var Page = req.body.page ? req.body.page:1;
+	var page = 1;
+	if(req.query.p){
+		page = req.query.p < 1 ? 1 : req.query.p;
+	}
+	// 每页显示数量
+	var limit = req.body.numberOfPages ? req.body.numberOfPages : 10;
+	
+	var searchContent = req.body.searchContent ? req.body.searchContent : '';
+	console.log('pageSize: %d,page: %d ,searchContent: %s',limit,page,searchContent);
+
 	var pageOption = {
 		i_pageSize:{
 			sqlType:"number",
 			direction:"input",
-			inputValue:pageSize
+			inputValue:limit
 		},
 		i_page:{
 			sqlType:"number",
 			direction:"input",
-			inputValue:Page
+			inputValue:page
+		},
+		i_query:{
+			sqlType:"string",
+			direction:"input",
+			inputValue:searchContent
 		}
 	};
+
 	db.executeProcedure('pageSYS_User',pageOption,function(err, recordsets,returnValue,affected){
 		console.log(requestTime + "跳转到用户主页");
 		if (err){
     		res.json(err);
     	} else
     	{
+    		// size 当前页面有多少条记录
+			// pageCount 一共有多少页
+			// numberOf 分页用几个标签显示
     		//res.json(recordsets);
-    		res.render('users', { title: '用户管理',pageName:'用户管理',users:recordsets.recordset,totalCount:recordsets.recordsets[1][0].totalCount});
+    		var pageCount = recordsets.recordsets[1][0].totalCount;
+    		res.render('users', { title: '用户管理',pageName:'用户管理',users:recordsets.recordset,
+    			totalCount:pageCount,
+    			pageCount: Math.ceil(parseInt(pageCount) / limit),
+    			size:recordsets.recordset.length,
+    			numberOf:pageCount > 10 ? 10 : pageCount,
+    			num:page,
+    			limit:limit});
     		//console.log(recordsets.recordsets[1][0].totalCount);	
     	}
 	});

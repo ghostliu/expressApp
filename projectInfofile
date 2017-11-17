@@ -131,7 +131,7 @@ values(
 SELECT 1 as codeId
 go
 
-// 更新系统配置信息
+-- 更新系统配置信息
 create procedure UpdateSYS_SystemConfig 
 @i_FID int,
 @i_FName varchar(200),
@@ -151,20 +151,26 @@ else
 end
 go
 
-// 用户表分页
+-- 用户表分页
 create proc pageSYS_User
 @i_pageSize int,
-@i_page int
-
+@i_page int,
+@i_query varchar(100)
 as 
 declare @temp int
 set @temp=@i_pageSize * (@i_page -1)
 begin 
-  select top (select @i_pageSize) FUserID,LoginName,UserName,Sex,Email,MobilePhone,FNote,IsSuper,WeiXinId,CreateDtm  from LL_Users
-  where FUserID not in (select top (select @temp) FUserID from LL_Users)
+  select top (select @i_pageSize) FUserID,LoginName,UserName,Sex,Email,MobilePhone,FNote,IsSuper,WeiXinId,CreateDtm  from SYS_Users
+  where FUserID not in (select top (select @temp) FUserID from SYS_Users) and ( FUserId like '%' + @i_query + '%' or
+      LoginName like '%' + @i_query +'%'  or 
+      username like '%' + @i_query + '%' or 
+      email like '%' + @i_query + '%' or 
+      MobilePhone like '%' + @i_query + '%' or 
+      FNote like '%' + @i_query + '%' or 
+      WeiXinId like '%' + @i_query + '%')
   order by FUserID
 
-  select count(FUserID) as totalCount from LL_Users
+  select count(FUserID) as totalCount from SYS_Users
 end
 go
 
